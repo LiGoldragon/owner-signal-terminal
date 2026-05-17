@@ -311,7 +311,7 @@ dependencies = [
 [[package]]
 name = "signal-persona-terminal"
 version = "0.1.0"
-source = "git+https://github.com/LiGoldragon/signal-persona-terminal.git?branch=main#170973537aaff818edaba311f3e6845242039af0"
+source = "git+https://github.com/LiGoldragon/signal-persona-terminal.git?branch=main#f9d4c75da3b6851170f66d20fd94cc5bb242924c"
 dependencies = [
  "nota-codec",
  "nota-config",
