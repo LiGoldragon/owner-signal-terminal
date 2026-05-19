@@ -25,6 +25,31 @@ shape and orders terminal session lifecycle through this OwnerSignal
 surface. `persona-terminal` owns the actual component state and session
 processes.
 
+## MUST IMPLEMENT — signal architecture migration
+
+This contract is migrating to contract-local verbs per
+`primary/reports/designer/238-signal-architecture-redirection-contract-local-verbs.md`
+and `primary/reports/designer/239-signal-architecture-migration-plan.md`.
+
+Drop the `Mutate CreateSession` / `Retract RetireSession` wrapping.
+The contract-local owner verbs are `CreateSession` and `RetireSession`
+directly (already verb-form). Alternatively, lift the `Session`
+suffix to the payload and use `Create` and `Retire` with payloads
+named `Session` — this matches the pattern across the other
+owner-signal-* crates where `Configure` carries `Configuration` and
+`Register` carries `Registration`. Move verb-to-Sema lowering
+(`CreateSession` → `Assert` session row plus child-process start
+effect, `RetireSession` → `Retract` session row plus child-process
+stop effect) into `persona-terminal`. The dependency on `signal-core`
+shifts to `signal-frame`.
+
+References: `primary/reports/designer/238-signal-architecture-redirection-contract-local-verbs.md`,
+`primary/reports/designer/239-signal-architecture-migration-plan.md`.
+
+**Note to remover:** when the refactor lands, remove this section and
+add a `## Migration history — contract-local verbs (2026-05-XX)`
+paragraph noting the shape change.
+
 ## 1 · Contract surface
 
 | Request | Signal verb | Meaning |
