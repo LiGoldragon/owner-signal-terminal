@@ -1,0 +1,39 @@
+{}
+
+[]
+
+[
+  (CreateSession [Session])
+  (RetireSession [Session])
+  (Policy [ViewerAdapter])
+]
+
+[]
+
+{
+  CreateSession [(Session Session)]
+  RetireSession [(Session Session)]
+  Policy [(ViewerAdapter ViewerAdapter)]
+  Terminal (Identifier)
+  Injection (Text)
+  Transcript (Identifier)
+  Register (Text)
+  Unregister (Identifier)
+  List (Text)
+  Acquire (Identifier)
+  Release (Identifier)
+  Resolve (Name)
+  Session (Name)
+  ViewerAdapter (Text)
+  Open (Text)
+  Text (String)
+  Identifier (u64)
+  Name (String)
+  Path (String)
+  Status [Concept Active Retired]
+}
+
+[
+  (Version 0 1)
+  (Status Concept)
+]
