@@ -1,4 +1,4 @@
-use nota_codec::{Decoder, Encoder, NotaDecode, NotaEncode};
+use nota_next::{NotaDecode, NotaEncode, NotaSource};
 use owner_signal_terminal::{
     CreateSession, Frame, FrameBody, OwnerTerminalOperationKind, OwnerTerminalReply,
     OwnerTerminalRequest, OwnerTerminalRequestUnimplemented, OwnerTerminalUnimplementedReason,
@@ -31,8 +31,8 @@ fn environment() -> TerminalEnvironmentBinding {
     }
 }
 
-fn data_socket_path() -> signal_persona::WirePath {
-    signal_persona::WirePath::new("/run/persona/terminal/sessions/operator/data.sock")
+fn data_socket_path() -> signal_engine_management::WirePath {
+    signal_engine_management::WirePath::new("/run/persona/terminal/sessions/operator/data.sock")
 }
 
 fn exchange() -> ExchangeIdentifier {
@@ -83,13 +83,12 @@ fn round_trip_nota<T>(value: T, expected: &str)
 where
     T: NotaEncode + NotaDecode + PartialEq + std::fmt::Debug,
 {
-    let mut encoder = Encoder::new();
-    value.encode(&mut encoder).expect("encode nota text");
-    let encoded = encoder.into_string();
+    let encoded = value.to_nota();
     assert_eq!(encoded, expected);
 
-    let mut decoder = Decoder::new(&encoded);
-    let recovered = T::decode(&mut decoder).expect("decode nota text");
+    let recovered = NotaSource::new(&encoded)
+        .parse::<T>()
+        .expect("decode nota text");
     assert_eq!(recovered, value);
     assert!(
         CANONICAL.contains(expected),
@@ -174,25 +173,25 @@ fn owner_terminal_canonical_examples_round_trip() {
             environment: Vec::new(),
             working_directory: None,
         }),
-        "(CreateSession (operator (pi []) [] None))",
+        "(CreateSession ([operator] ([pi] []) [] None))",
     );
     round_trip_nota(
         OwnerTerminalRequest::RetireSession(RetireSession { name: terminal() }),
-        "(RetireSession (operator))",
+        "(RetireSession ([operator]))",
     );
     round_trip_nota(
         OwnerTerminalReply::SessionCreated(SessionCreated {
             name: terminal(),
             data_socket_path: data_socket_path(),
         }),
-        "(SessionCreated (operator [/run/persona/terminal/sessions/operator/data.sock]))",
+        "(SessionCreated ([operator] [/run/persona/terminal/sessions/operator/data.sock]))",
     );
     round_trip_nota(
         OwnerTerminalReply::SessionRetired(SessionRetired {
             name: terminal(),
             exit_status: Some(TerminalExitStatus::StatusUnavailable),
         }),
-        "(SessionRetired (operator (Some (StatusUnavailable))))",
+        "(SessionRetired ([operator] (Some (StatusUnavailable))))",
     );
     round_trip_nota(
         OwnerTerminalReply::OwnerTerminalRequestUnimplemented(OwnerTerminalRequestUnimplemented {
@@ -200,6 +199,6 @@ fn owner_terminal_canonical_examples_round_trip() {
             operation: OwnerTerminalOperationKind::CreateSession,
             reason: OwnerTerminalUnimplementedReason::NotBuiltYet,
         }),
-        "(OwnerTerminalRequestUnimplemented (operator CreateSession NotBuiltYet))",
+        "(OwnerTerminalRequestUnimplemented ([operator] CreateSession NotBuiltYet))",
     );
 }

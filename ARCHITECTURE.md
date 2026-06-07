@@ -15,12 +15,12 @@ The first owner chain is:
 
 ```mermaid
 flowchart LR
-    orchestrate["persona-orchestrate"] --> harness["persona-harness"]
+    orchestrate["orchestrate"] --> harness["harness"]
     harness --> terminal["terminal"]
     terminal --> cell["terminal-cell library"]
 ```
 
-`persona-orchestrate` orders harness work. The harness knows adapter
+`orchestrate` orders harness work. The harness knows adapter
 shape and orders terminal session lifecycle through this meta Signal
 surface. `terminal` owns the actual component state and session
 processes.
@@ -64,7 +64,7 @@ This crate imports terminal identity and status nouns from
 - `TerminalName`
 - `TerminalExitStatus`
 
-It also uses `signal-persona::WirePath` for session data-socket paths.
+It also uses `signal-engine-management::WirePath` for session data-socket paths.
 It does not duplicate ordinary terminal input, capture, prompt-pattern,
 or worker-lifecycle records.
 

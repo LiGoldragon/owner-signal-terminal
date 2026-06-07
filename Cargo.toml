@@ -5,7 +5,7 @@ edition      = "2024"
 rust-version = "1.85"
 license      = "MIT OR Apache-2.0"
 repository   = "https://github.com/LiGoldragon/owner-signal-terminal"
-description  = "OwnerSignal contract for privileged terminal session lifecycle."
+description  = "Meta Signal contract for privileged terminal session lifecycle."
 publish      = false
 
 [lib]
@@ -14,9 +14,9 @@ path = "src/lib.rs"
 
 [dependencies]
 signal-frame            = { git = "https://github.com/LiGoldragon/signal-frame.git", branch = "main" }
-signal-persona          = { git = "https://github.com/LiGoldragon/signal-persona.git" }
+signal-engine-management = { git = "https://github.com/LiGoldragon/signal-engine-management.git", branch = "main" }
 signal-terminal = { git = "https://github.com/LiGoldragon/signal-terminal.git", branch = "main" }
-nota-codec              = { git = "https://github.com/LiGoldragon/nota-codec.git", branch = "main" }
+nota-next               = { git = "https://github.com/LiGoldragon/nota-next.git", branch = "main" }
 rkyv                    = { version = "0.8", default-features = false, features = ["std", "bytecheck", "little_endian", "pointer_width_32", "unaligned"] }
 thiserror               = "2"
 

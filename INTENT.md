@@ -1,7 +1,7 @@
 # INTENT — owner-signal-terminal
 
 *The currently named meta-only wire contract for privileged Persona terminal session lifecycle.
-Defines the typed request/reply channel that `persona-harness` uses to create and
+Defines the typed request/reply channel that `harness` uses to create and
 retire terminal sessions in the `terminal` component.
 Companion to `ARCHITECTURE.md` and `Cargo.toml`. Maintenance: `primary/skills/repo-intent.md`.*
 
@@ -19,7 +19,7 @@ capture, prompt-pattern, and worker-lifecycle traffic stays in
 `owner-signal-terminal` is the **meta-only authority surface** for `terminal`.
 It carries the requests that create or retire terminal sessions — privileged
 because they start or stop child-process state owned by the terminal component.
-The owner chain is `persona-orchestrate` → `persona-harness` → `terminal` →
+The meta chain is `orchestrate` → `harness` → `terminal` →
 `terminal-cell`: orchestrate orders harness work; the harness knows adapter shape
 and orders terminal session lifecycle through this surface; `terminal` owns the
 actual component state and session processes. Ordinary callers use
@@ -38,7 +38,7 @@ The owner channel carries (Layer 1 — contract-local verbs on the wire):
   meta surface but the runtime path is not built yet).
 
 Shared nouns are imported, not copied: `TerminalName` and `TerminalExitStatus`
-from `signal-terminal`, and `signal-persona::WirePath` for session data-socket
+from `signal-terminal`, and `signal-engine-management::WirePath` for session data-socket
 paths. The daemon lowers these operations to typed Component Commands (Layer 2,
 e.g. `AssertSessionRecord` + `StartChildProcess`) which project to payloadless
 Sema labels (Layer 3) for observation.
