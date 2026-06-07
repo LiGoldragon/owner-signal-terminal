@@ -1,6 +1,6 @@
 # skills — owner-signal-terminal
 
-Read this before editing the owner-only terminal contract.
+Read this before editing the meta-only terminal contract.
 
 ## Required context
 
@@ -14,7 +14,7 @@ Read this before editing the owner-only terminal contract.
 
 ## Boundary
 
-This crate owns the privileged OwnerSignal vocabulary for
+This crate owns the privileged meta Signal vocabulary for
 `terminal` session lifecycle. It contains no daemon code, no
 actors, no sockets, and no storage code.
 
@@ -27,8 +27,8 @@ starting and retiring terminal sessions.
 
 - `CreateSession` and `RetireSession` live here, not in the ordinary
   terminal contract.
-- Every request variant declares a Signal root verb through
-  `signal_channel!`.
+- Every request variant declares a contract-local operation head
+  through `signal_channel!`.
 - Shared terminal nouns such as `TerminalName` and `TerminalExitStatus`
   are imported from `signal-terminal`; do not duplicate them.
 - Runtime interpretation stays in `terminal`.

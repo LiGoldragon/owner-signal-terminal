@@ -1,11 +1,11 @@
-//! OwnerSignal contract — privileged `terminal` session lifecycle.
+//! Meta Signal contract — privileged `terminal` session lifecycle.
 //!
 //! Ordinary terminal transport lives in `signal-terminal`. This crate
-//! carries the owner-only vocabulary that starts and retires terminal sessions.
+//! carries the meta-only vocabulary that starts and retires terminal sessions.
 
 use nota_codec::{NotaEnum, NotaRecord, NotaTransparent};
 use rkyv::{Archive, Deserialize as RkyvDeserialize, Serialize as RkyvSerialize};
-use signal_core::signal_channel;
+use signal_frame::signal_channel;
 pub use signal_terminal::{TerminalExitStatus, TerminalName};
 
 #[derive(
@@ -145,23 +145,22 @@ pub enum OwnerTerminalUnimplementedReason {
 
 signal_channel! {
     channel OwnerTerminal {
-        request OwnerTerminalRequest {
-            Mutate CreateSession(CreateSession),
-            Retract RetireSession(RetireSession),
-        }
-        reply OwnerTerminalReply {
-            SessionCreated(SessionCreated),
-            SessionRetired(SessionRetired),
-            OwnerTerminalRequestUnimplemented(OwnerTerminalRequestUnimplemented),
-        }
+        operation CreateSession(CreateSession),
+        operation RetireSession(RetireSession),
+    }
+    reply OwnerTerminalReply {
+        SessionCreated(SessionCreated),
+        SessionRetired(SessionRetired),
+        OwnerTerminalRequestUnimplemented(OwnerTerminalRequestUnimplemented),
     }
 }
 
-pub type Frame = OwnerTerminalFrame;
-pub type FrameBody = OwnerTerminalFrameBody;
-pub type ChannelRequest = OwnerTerminalChannelRequest;
-pub type ChannelReply = OwnerTerminalChannelReply;
-pub type RequestBuilder = OwnerTerminalRequestBuilder;
+pub type OwnerTerminalRequest = Operation;
+pub type OwnerTerminalFrame = Frame;
+pub type OwnerTerminalFrameBody = FrameBody;
+pub type OwnerTerminalRequestBuilder = RequestBuilder;
+pub type ChannelRequest = Operation;
+pub type ChannelReply = OwnerTerminalReply;
 
 impl OwnerTerminalRequest {
     pub fn operation_kind(&self) -> OwnerTerminalOperationKind {
@@ -181,23 +180,5 @@ impl From<CreateSession> for OwnerTerminalRequest {
 impl From<RetireSession> for OwnerTerminalRequest {
     fn from(payload: RetireSession) -> Self {
         Self::RetireSession(payload)
-    }
-}
-
-impl From<SessionCreated> for OwnerTerminalReply {
-    fn from(payload: SessionCreated) -> Self {
-        Self::SessionCreated(payload)
-    }
-}
-
-impl From<SessionRetired> for OwnerTerminalReply {
-    fn from(payload: SessionRetired) -> Self {
-        Self::SessionRetired(payload)
-    }
-}
-
-impl From<OwnerTerminalRequestUnimplemented> for OwnerTerminalReply {
-    fn from(payload: OwnerTerminalRequestUnimplemented) -> Self {
-        Self::OwnerTerminalRequestUnimplemented(payload)
     }
 }
