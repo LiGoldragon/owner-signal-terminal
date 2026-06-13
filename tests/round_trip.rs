@@ -173,25 +173,25 @@ fn meta_terminal_canonical_examples_round_trip() {
             environment: Vec::new(),
             working_directory: None,
         }),
-        "(CreateSession ([operator] ([pi] []) [] None))",
+        "(CreateSession (operator (pi []) [] None))",
     );
     round_trip_nota(
         MetaTerminalRequest::RetireSession(RetireSession { name: terminal() }),
-        "(RetireSession ([operator]))",
+        "(RetireSession (operator))",
     );
     round_trip_nota(
         MetaTerminalReply::SessionCreated(SessionCreated {
             name: terminal(),
             data_socket_path: data_socket_path(),
         }),
-        "(SessionCreated ([operator] [/run/persona/terminal/sessions/operator/data.sock]))",
+        "(SessionCreated (operator /run/persona/terminal/sessions/operator/data.sock))",
     );
     round_trip_nota(
         MetaTerminalReply::SessionRetired(SessionRetired {
             name: terminal(),
             exit_status: Some(TerminalExitStatus::StatusUnavailable),
         }),
-        "(SessionRetired ([operator] (Some StatusUnavailable)))",
+        "(SessionRetired (operator (Some StatusUnavailable)))",
     );
     round_trip_nota(
         MetaTerminalReply::MetaTerminalRequestUnimplemented(MetaTerminalRequestUnimplemented {
@@ -199,6 +199,6 @@ fn meta_terminal_canonical_examples_round_trip() {
             operation: MetaTerminalOperationKind::CreateSession,
             reason: MetaTerminalUnimplementedReason::NotBuiltYet,
         }),
-        "(MetaTerminalRequestUnimplemented ([operator] CreateSession NotBuiltYet))",
+        "(MetaTerminalRequestUnimplemented (operator CreateSession NotBuiltYet))",
     );
 }

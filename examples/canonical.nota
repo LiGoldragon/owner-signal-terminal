@@ -1,7 +1,7 @@
 ;; Canonical NOTA examples for meta-signal-terminal.
 
-(CreateSession ([operator] ([pi] []) [] None))
-(RetireSession ([operator]))
-(SessionCreated ([operator] [/run/persona/terminal/sessions/operator/data.sock]))
-(SessionRetired ([operator] (Some StatusUnavailable)))
-(MetaTerminalRequestUnimplemented ([operator] CreateSession NotBuiltYet))
+(CreateSession (operator (pi []) [] None))
+(RetireSession (operator))
+(SessionCreated (operator /run/persona/terminal/sessions/operator/data.sock))
+(SessionRetired (operator (Some StatusUnavailable)))
+(MetaTerminalRequestUnimplemented (operator CreateSession NotBuiltYet))
